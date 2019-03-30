@@ -1,5 +1,5 @@
 object formulario_histograma: Tformulario_histograma
-  Left = 2249
+  Left = 281
   Height = 104
   Top = 187
   Width = 159
