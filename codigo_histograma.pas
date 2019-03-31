@@ -90,6 +90,9 @@ begin
      asignar_tam_image := imagen;
 end;
 
+{
+ 	funcion que realiza el guardado del histograma
+}
 procedure Tformulario_histograma.guardar_capturaClick(Sender: TObject);
 var
    imagen : TBitmap;
@@ -128,6 +131,14 @@ var
    caracter : char;
 begin
 
+     contador_a := 0;
+     contador_e := 0;
+     contador_i := 0;
+     contador_o := 0;
+     contador_u := 0;
+
+     total := 0;
+
      if cuadro_abrir.Execute then begin
         AssignFile(Archivo, cuadro_abrir.FileName);
 
@@ -154,19 +165,18 @@ begin
            arreglo_mayor[4] := contador_u;
 
            for j := 0 to 3 do begin
-           	   if arreglo_mayor[j] > arreglo_mayor[j+1] then begin
+           	   if arreglo_mayor[j] > total then begin
                   total := arreglo_mayor[j];
-               end else begin
-                   total := arreglo_mayor[j+1];
                end;
            end;
-
            crearHistograma(arreglo_barra, grafico.canvas);
 
            closefile(Archivo);
+        end else begin
+            showmessage('Error al abrir, intente con otro archivo');
         end;
 
-     end;
+     end; // fin IF cuadro_abrir.Execute
 
 end;
 
@@ -181,7 +191,6 @@ var
 
 begin;
 	  // Llamar a la funcion de crearBarras
-
       for  i := 0 to cantidad_barras-1 do begin
       	  arreglo_aux[i] := crearBarra(i);
       end;
@@ -226,8 +235,7 @@ begin
 	 barraAux.color  := auxcolor;
      barraAux.titulo := auxtitulo;
 
-     crearBarra := barraAux;
-
+     crearBarra := barraAux; // Devuelve la barra creada
 end;
 
 {
@@ -246,7 +254,6 @@ begin
      y := 0;
      x2 := 0;
      y2 := 0;
-
 
      altura := lienzo.Height-125;
      ancho_barra := 40;
@@ -269,7 +276,7 @@ begin
               'U' : contador := contador_u;
          end;
 
-         if total = 0 then begin
+         if total = 0 then begin // si el total es cero, la altura de la barra sera cero
      	 	 y := 0;
          end else begin
          	 y := round(altura * ( 1-(contador/total) ));

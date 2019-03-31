@@ -1,7 +1,7 @@
 object formulario_histograma: Tformulario_histograma
-  Left = 1112
+  Left = 280
   Height = 104
-  Top = 193
+  Top = 187
   Width = 159
   Caption = 'Histograma'
   ClientHeight = 84
