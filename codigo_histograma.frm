@@ -1,7 +1,7 @@
 object formulario_histograma: Tformulario_histograma
-  Left = 281
+  Left = 1112
   Height = 104
-  Top = 187
+  Top = 193
   Width = 159
   Caption = 'Histograma'
   ClientHeight = 84
@@ -26,6 +26,7 @@ object formulario_histograma: Tformulario_histograma
       end
       object guardar_captura: TMenuItem
         Caption = 'Guardar Captura'
+        OnClick = guardar_capturaClick
       end
     end
     object opciones: TMenuItem

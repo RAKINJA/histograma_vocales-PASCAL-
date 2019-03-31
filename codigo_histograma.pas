@@ -33,13 +33,17 @@ type
     guardar_captura: TMenuItem;
     procedure abrir_archivoClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure guardar_capturaClick(Sender: TObject);
   private
 
   public
-  		procedure crearHistograma(arreglo_barra: array of TBarra);
+    	procedure pintarBitmap( canvas_bitmap : TCanvas );
+
+        function asignar_tam_image( imagen : TImage ) : TImage;
+  		procedure crearHistograma(arreglo_barra: array of TBarra; lienzo : TCanvas);
         function crearBarra(identifier : integer): TBarra;
-        procedure asignarCoordenadas(arreglo_barra: array of TBarra);
-  		procedure pintarBarras( barra :TBarra );
+        procedure asignarCoordenadas(arreglo_barra: array of TBarra; lienzo : TCanvas);
+  		procedure pintarBarras( barra :TBarra; lienzo : TCanvas );
 
   end;
 
@@ -51,7 +55,10 @@ var
   total : integer; // total de valores maximos
   Archivo : Textfile; // variable para el menu_archivo de texto
 
+  imagen : TImage;
+
   arreglo_barra : array [0..4] of TBarra;
+  arreglo_barra_bitmap : array [0..4] of TBarra;
 implementation
 
 {$R *.frm}
@@ -67,10 +74,51 @@ begin
      formulario_histograma.Width  := 500;
      formulario_histograma.Height := 400;
 
-     grafico.setbounds(0,0,0,0);
-     grafico.Height:=400;
-     grafico.Width :=500;
-     grafico.Canvas.Rectangle(0,0,grafico.Width, grafico.Height);
+     grafico := asignar_tam_image(grafico);
+end;
+
+{
+ 	funcion que asigna el tamaño a una variable de tipo TImage
+}
+function Tformulario_histograma.asignar_tam_image( imagen : TImage ) : TImage;
+begin
+     imagen.setbounds(0,0,0,0);
+     imagen.Height:=400;
+     imagen.Width :=500;
+     imagen.Canvas.Rectangle(0,0,grafico.Width, grafico.Height);
+
+     asignar_tam_image := imagen;
+end;
+
+procedure Tformulario_histograma.guardar_capturaClick(Sender: TObject);
+var
+   imagen : TBitmap;
+begin
+     if cuadro_abrir.FileName = '' then begin
+     	showmessage('Seleccione un archivo adecuado');
+	 end else begin
+	   imagen := TBitmap.Create;
+
+       try
+     	  imagen.SetSize(grafico.width, grafico.height);
+          imagen.Width  :=grafico.Width;
+          imagen.height := grafico.Height;
+          imagen.Canvas.Rectangle(0,0,grafico.Width, grafico.Height);
+          pintarBitmap(imagen.canvas);
+          imagen.SaveToFile('histograma.bmp');
+       finally
+       end;
+	 end;
+end;
+
+
+
+procedure Tformulario_histograma.pintarBitmap( canvas_bitmap : TCanvas );
+begin
+     with canvas_bitmap do
+	 begin
+       crearhistograma(arreglo_barra_bitmap, canvas_bitmap);
+     end;
 end;
 
 procedure Tformulario_histograma.abrir_archivoClick(Sender: TObject);
@@ -79,6 +127,7 @@ var
    j : integer;
    caracter : char;
 begin
+
      if cuadro_abrir.Execute then begin
         AssignFile(Archivo, cuadro_abrir.FileName);
 
@@ -112,7 +161,7 @@ begin
                end;
            end;
 
-           crearHistograma(arreglo_barra);
+           crearHistograma(arreglo_barra, grafico.canvas);
 
            closefile(Archivo);
         end;
@@ -125,7 +174,7 @@ end;
     Procedimiento para graficar
 }
 
-procedure Tformulario_histograma.crearHistograma(arreglo_barra: array of TBarra);
+procedure Tformulario_histograma.crearHistograma(arreglo_barra: array of TBarra; lienzo : TCanvas);
 var
    arreglo_aux : array [0..4] of TBarra;
    i : integer;
@@ -138,7 +187,7 @@ begin;
       end;
 
       // llamar a la funcion de asignarCoordenadas
-      asignarCoordenadas(arreglo_aux);
+      asignarCoordenadas(arreglo_aux, lienzo);
 end;
 
 {
@@ -184,7 +233,7 @@ end;
 {
  	funcion para asignar coordenadas a las barras
 }
-procedure Tformulario_histograma.asignarCoordenadas(arreglo_barra: array of TBarra);
+procedure Tformulario_histograma.asignarCoordenadas(arreglo_barra: array of TBarra; lienzo : TCanvas );
 var
    i : integer; // variable para recorrer el arreglo de barras
 
@@ -193,17 +242,22 @@ var
    x,y,x2,y2 : integer;
 begin
 
-     altura := grafico.Height-125;
+     x := 0;
+     y := 0;
+     x2 := 0;
+     y2 := 0;
+
+
+     altura := lienzo.Height-125;
      ancho_barra := 40;
      espacio     := 25;
 
-     x := 100;
-
+     x  := 100;
      x2 := 100+ancho_barra;
      y2 := 350;
 
-     grafico.canvas.Brush.Color := Clsilver;
-	 grafico.canvas.Rectangle(0,0,grafico.Width, grafico.Height);
+     lienzo.Brush.Color := Clsilver;
+	 lienzo.Rectangle(0,0,lienzo.Width, lienzo.Height);
 
      for i :=0 to cantidad_barras-1 do begin
 
@@ -232,15 +286,18 @@ begin
          x  := x + ancho_barra + espacio;
          x2 := x2 + espacio + ancho_barra;
 
+         // se guardara el sigueiente elemento como elemento del arreglo para el bitmap
+         arreglo_barra_bitmap[i] := arreglo_barra[i];
+
          // llamar a la funcion de pintado
-      	 pintarBarras( arreglo_barra[i] );
+      	 pintarBarras( arreglo_barra[i], lienzo );
      end;
 end;
 
 {
  	procedimiento para pintar las Barras
 }
-procedure Tformulario_histograma.pintarBarras( barra : TBarra );
+procedure Tformulario_histograma.pintarBarras( barra : TBarra; lienzo : TCanvas );
 var
    x1,y1,x2,y2 : integer;
    cantidad : string;
@@ -252,11 +309,11 @@ begin
      y2 := barra.coordenadas[2].y;
 
      // Coloca el color del pincle y lapiz del color de la barra
-     grafico.canvas.Brush.Color := barra.color;
-     grafico.canvas.Pen.Color   := barra.color;
+     lienzo.Brush.Color := barra.color;
+     lienzo.Pen.Color   := barra.color;
 
      // grafica la barra
-     grafico.Canvas.Rectangle( x2,y2,x1,y1 );
+     lienzo.Rectangle( x2,y2,x1,y1 );
 
      // selecciona que contador colocar sobre que barra
      case barra.titulo of
@@ -278,12 +335,12 @@ begin
      end;
 
      // Coloca los colores iguales al fondo
-     grafico.canvas.Brush.Color := Clsilver;
-     grafico.canvas.Pen.Color   := Clsilver;
+     lienzo.Brush.Color := Clsilver;
+     lienzo.Pen.Color   := Clsilver;
 
      // Coloca el titulo y la cantidad correspondiente
-     grafico.Canvas.TextOut(x1+15,y2-300, cantidad );
-     grafico.Canvas.TextOut(x1+15,y2+5, barra.titulo );
+     lienzo.TextOut(x1+15,y2-300, cantidad );
+     lienzo.TextOut(x1+15,y2+5, barra.titulo );
 end;
 
 end.
