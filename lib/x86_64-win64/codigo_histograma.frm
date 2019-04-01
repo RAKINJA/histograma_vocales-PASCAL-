@@ -1,7 +1,7 @@
 object formulario_histograma: Tformulario_histograma
-  Left = 280
+  Left = 86
   Height = 104
-  Top = 187
+  Top = 85
   Width = 159
   Caption = 'Histograma'
   ClientHeight = 84
@@ -33,6 +33,7 @@ object formulario_histograma: Tformulario_histograma
       Caption = 'Opciones'
       object colores: TMenuItem
         Caption = 'Color'
+        OnClick = coloresClick
       end
     end
   end

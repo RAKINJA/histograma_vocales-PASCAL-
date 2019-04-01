@@ -7,8 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the adLCL widgetset
-  Forms, codigo_histograma
-  { you can add units after this };
+  Forms, codigo_histograma, opcion_colores;
 
 {$R *.res}
 
@@ -17,6 +16,7 @@ begin
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(Tformulario_histograma, formulario_histograma);
+  Application.CreateForm(TopColores, opColores);
   Application.Run;
 end.
 

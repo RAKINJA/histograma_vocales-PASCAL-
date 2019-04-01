@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  Menus;
+  Menus, opcion_colores;
 
 type
 
@@ -32,6 +32,7 @@ type
     abrir_archivo: TMenuItem;
     guardar_captura: TMenuItem;
     procedure abrir_archivoClick(Sender: TObject);
+    procedure coloresClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure guardar_capturaClick(Sender: TObject);
   private
@@ -114,8 +115,6 @@ begin
 	 end;
 end;
 
-
-
 procedure Tformulario_histograma.pintarBitmap( canvas_bitmap : TCanvas );
 begin
      with canvas_bitmap do
@@ -178,6 +177,38 @@ begin
 
      end; // fin IF cuadro_abrir.Execute
 
+end;
+
+{
+ 	Opcion de Color para las barras
+}
+procedure Tformulario_histograma.coloresClick(Sender: TObject);
+var
+   i : integer;
+begin
+     opColores.ShowModal;
+
+     if opColores.colora_cambio then begin
+        arreglo_barra[0].color := opColores.colorA;
+     end;
+     if opColores.colore_cambio then begin
+        arreglo_barra[1].color := opColores.colorE;
+     end;
+     if opColores.colori_cambio then begin
+        arreglo_barra[2].color := opColores.colorI;
+     end;
+     if opColores.coloro_cambio then begin
+        arreglo_barra[3].color := opColores.colorO;
+     end;
+     if opColores.coloru_cambio then begin
+        arreglo_barra[4].color := opColores.colorU;
+     end;
+
+     if opColores.ModalResult = MrOk then begin
+       for i:=0 to cantidad_barras-1 do begin
+	        pintarBarras(arreglo_barra[i], grafico.canvas);
+       end;
+     end;
 end;
 
 {
