@@ -31,7 +31,7 @@
         <PackageName Value="adLCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="4">
+    <Units Count="3">
       <Unit0>
         <Filename Value="histograma_graficacion.ppr"/>
         <FRMtype Value="0"/>
@@ -49,16 +49,10 @@
         <Filename Value="opcion_colores.pas"/>
         <FRMtype Value="0"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form1"/>
+        <ComponentName Value="opColores"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit2>
-      <Unit3>
-        <Filename Value="opcion_colores.pas"/>
-        <FRMtype Value="0"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="opColores"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit3>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

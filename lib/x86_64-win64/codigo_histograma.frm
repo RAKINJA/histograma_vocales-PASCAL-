@@ -1,8 +1,9 @@
 object formulario_histograma: Tformulario_histograma
-  Left = 86
+  Left = 316
   Height = 104
-  Top = 85
+  Top = 174
   Width = 159
+  BorderStyle = bsToolWindow
   Caption = 'Histograma'
   ClientHeight = 84
   ClientWidth = 159

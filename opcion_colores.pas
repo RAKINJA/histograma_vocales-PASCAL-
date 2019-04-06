@@ -5,7 +5,8 @@ unit opcion_colores;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons,
+  ExtCtrls;
 
 type
   {TopColores}
@@ -25,7 +26,7 @@ type
     o_: TLabel;
     u_: TLabel;
 
-    procedure color_aClick(Sender: TObject);
+    //procedure color_aClick(Sender: TObject);
     procedure color_aColorChanged(Sender: TObject);
     procedure color_eColorChanged(Sender: TObject);
     procedure color_iColorChanged(Sender: TObject);
@@ -36,112 +37,53 @@ type
   private
 
   public
-  		colorA , colorE, colorI, colorO, colorU : TColor;
+        colorA , colorE, colorI, colorO, colorU : TColor;
         colora_cambio, colore_cambio, colori_cambio, coloro_cambio, coloru_cambio : boolean;
   end;
 
 var
   opColores: TopColores;
-
-  //colorA , colorE, colorI, colorO, colorU : TColor;
+  colorA , colorE, colorI, colorO, colorU : TColor;
 
 implementation
 
 {$R *.frm}
 
 { TopColores }
-
 procedure TopColores.color_aColorChanged(Sender: TObject);
 begin
-     if color_a.ColorDialog.Execute then begin
-     	colorA := color_a.ColorDialog.Color;
-     end;
-
-     color_a.ButtonColor := colorA;
-
+     colorA := color_a.ButtonColor;
      colora_cambio := true;
-     colore_cambio := false;
-     colori_cambio := false;
-     coloro_cambio := false;
-     coloru_cambio := false;
-end;
-
-procedure TopColores.color_aClick(Sender: TObject);
-begin
-	 if color_e.ColorDialog.Execute then begin
-        colorE := color_e.ColorDialog.Color;
-        color_e.ButtonColor:=colorE;
-     end;
-
-
-
-     colora_cambio := false;
-     colore_cambio := true;
-     colori_cambio := false;
-     coloro_cambio := false;
-     coloru_cambio := false;
 end;
 
 procedure TopColores.color_eColorChanged(Sender: TObject);
 begin
-     {if color_e.ColorDialog.Execute then begin
-        colorE := color_e.ColorDialog.Color;
-     end;
-
-     color_e.ButtonColor:=colorE;
-
-     colora_cambio := false;
+     colorE := color_e.ButtonColor;
      colore_cambio := true;
-     colori_cambio := false;
-     coloro_cambio := false;
-     coloru_cambio := false;}
 end;
 
 procedure TopColores.color_iColorChanged(Sender: TObject);
 begin
-     if color_i.ColorDialog.Execute then begin
-        colorI := color_i.ColorDialog.Color;
-     end;
-
-     color_i.ButtonColor:=colorI;
-
-     colora_cambio := false;
-     colore_cambio := false;
+     colorI :=color_i.ButtonColor;
      colori_cambio := true;
-     coloro_cambio := false;
-     coloru_cambio := false;
 end;
 
 procedure TopColores.color_oColorChanged(Sender: TObject);
 begin
-	 if color_o.ColorDialog.Execute then begin
-        colorO := color_o.ColorDialog.Color;
-     end;
-     color_o.ButtonColor:=colorO;
-
-     colora_cambio := false;
-     colore_cambio := false;
-     colori_cambio := false;
+     colorO := color_o.ButtonColor;
      coloro_cambio := true;
-     coloru_cambio := false;
 end;
 
 procedure TopColores.color_uColorChanged(Sender: TObject);
 begin
-	 if color_u.ColorDialog.Execute then begin
-        colorU := color_u.ColorDialog.Color;
-     end;
-     color_u.ButtonColor:=colorU;
-
-     colora_cambio := false;
-     colore_cambio := false;
-     colori_cambio := false;
-     coloro_cambio := false;
+     colorU := color_u.ButtonColor;
      coloru_cambio := true;
 end;
 
 procedure TopColores.FormCreate(Sender: TObject);
 begin
+     TColorButton.Create(color_a);
+
      colora_cambio := false;
      colore_cambio := false;
      colori_cambio := false;
